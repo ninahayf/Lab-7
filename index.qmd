@@ -1,5 +1,5 @@
 ---
-title: "ESS 330 Project Proposals"
+title: "Land Cover Change"
 authors:
   - name: Nina Hayford & Sierra Mattiar
     affiliation: The University
@@ -10,3 +10,8 @@ bibliography: references.bib
 
 ## Section
 This is a simple placeholder for the manuscript's main document [@knuth84].
+
+## Drafting your Title 
+
+
+## Drafting the intro, background, and motivation for your project
