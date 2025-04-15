@@ -32,6 +32,9 @@ The data for this project was obtained from the NOAA website. The data includes:
 
 -   nrmavg.txt, nrmmax.txt, and nrmmin.txt: Normal average, maximum, and minimum daily temperatures
 
+-   elevation_US_Cities.csv: elevation data with the peaks and dips of the major US cities
+
+Each dataset includes location information (e.g., city or station), date/year, and the measurement of interest. These will be cross-referenced with elevation data to determine altitudinal patterns.
 ```{r}
 
 ```
