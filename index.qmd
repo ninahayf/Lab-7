@@ -55,16 +55,44 @@ We focused on data components that show temperature change and compared their al
 ```{r}
 library(tidyverse)
 library(readr)
+library(lubridate)
 
-# Read hot days data
-hot_days <- read_csv("cleaned_90_or_higher.csv.xlsx")
-elevation_data <- read_csv("elevation_US_Cities.csv")
+# Read the data
+hot_days <- read_csv("cleaned_90_or_higher.csv", show_col_types = FALSE)
+elevation_data <- read_csv("elevation_US_Cities_cleaned.csv", show_col_types = FALSE)
 
-# Convert elevation column to numeric
-colnames(elevation_data) <- c("City", "State", "Low_Feet", "High_Feet")
+# Create Elevation column
 elevation_data <- elevation_data %>%
-  mutate(Elevation = as.numeric(High_Feet)) %>%
+  mutate(Elevation = as.numeric(`High Feet`)) %>%
   select(City, State, Elevation)
+
+# Merge elevation data with hot_days
+hot_days <- left_join(hot_days, elevation_data, by = c("City", "State"))
+
+# Now create elevation bins
+hot_days <- hot_days %>%
+  mutate(elevation_bin = case_when(
+    Elevation < 1000 ~ "Low (<1000ft)",
+    Elevation >= 1000 & Elevation < 3000 ~ "Mid (1000–3000ft)",
+    Elevation >= 3000 ~ "High (>3000ft)"
+  ))
+
+```
+
+```{r}
+# Add a Year column (based on End_Date or Start_Date if needed)
+hot_days <- hot_days %>%
+  mutate(Year = as.numeric(substr(as.character(Start_Date), 1, 4)))
+
+# Plot trend over time by elevation bin
+hot_days %>%
+  ggplot(aes(x = Year, y = ANN, color = elevation_bin)) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  labs(title = "Average Number of Days ≥ 90°F (2000–2020)",
+       x = "Year",
+       y = "Days ≥ 90°F",
+       color = "Elevation Bin") +
+  theme_minimal()
 ```
 
 ## Methods Identification
