@@ -20,5 +20,5 @@ format:
   # pdf: default
 
 execute:
-  freeze: true
+  echo: true
 
