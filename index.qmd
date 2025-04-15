@@ -56,9 +56,15 @@ We focused on data components that show temperature change and compared their al
 library(tidyverse)
 library(readr)
 
-# Load and clean hot days dataset
-hot_days <- read_table("90_or_higher.txt", skip = 1)
-colnames(hot_days) <- c("station_id", "station_name", "state", "year", "days_90_or_more")
+# Read hot days data
+hot_days <- read_csv("cleaned_90_or_higher.csv.xlsx")
+elevation_data <- read_csv("elevation_US_Cities.csv")
+
+# Convert elevation column to numeric
+colnames(elevation_data) <- c("City", "State", "Low_Feet", "High_Feet")
+elevation_data <- elevation_data %>%
+  mutate(Elevation = as.numeric(High_Feet)) %>%
+  select(City, State, Elevation)
 ```
 
 ## Methods Identification
