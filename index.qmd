@@ -98,7 +98,46 @@ hot_days %>%
 
 #### Visualization 2
 ```{r}
+library(stringr)
+library(dplyr)
+# Load and clean data
+cool_days <- read_csv("cleaned_32_or_cooler.csv", show_col_types = FALSE)
 
+elevation_data <- read_csv("elevation_US_Cities_cleaned.csv", show_col_types = FALSE)
+
+# Create an elevation column 
+elevation_data <- elevation_data %>%
+  mutate(Elevation = as.numeric(`High Feet`)) %>%
+  select(City, State, Elevation)
+
+# Merge elevation data with hot_days
+cool_days <- left_join(cool_days, elevation_data, by = c("City", "State"))
+
+# Now create elevation bins
+cool_days <- cool_days %>%
+  mutate(elevation_bin = case_when(
+    Elevation < 1000 ~ "Low (<1000ft)",
+    Elevation >= 1000 & Elevation < 3000 ~ "Mid (1000–3000ft)",
+    Elevation >= 3000 ~ "High (>3000ft)"
+  ))
+
+# Create a proper Year column (if it uses the YYYYMM format)
+cool_days <- cool_days %>%
+  mutate(Year = as.integer(substr(Start_Date, 1, 4)))
+
+# Filter data to include only years 2000 to 2020
+cool_days_filtered <- cool_days %>%
+  dplyr::filter(Year >= 2000 & Year <= 2020)
+
+# Plot the trend over time by elevation bin
+cool_days %>%
+  ggplot(aes(x = Year, y = ANN, color = elevation_bin)) +
+  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
+  labs(title = "Average Number of Days ≤ 32°F (2000–2020)",
+       x = "Year",
+       y = "Days ≤ 32°F",
+       color = "Elevation Bin") +
+  theme_minimal()
 ```
 
 
