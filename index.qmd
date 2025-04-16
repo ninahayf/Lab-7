@@ -52,6 +52,7 @@ We focused on data components that show temperature change and compared their al
 - Create altitude bins (<1000 ft, 1000-3000 ft, >3000 ft)
 
 ### Data Visualization 
+#### Visualization 1
 ```{r}
 library(tidyverse)
 library(readr)
@@ -94,6 +95,12 @@ hot_days %>%
        color = "Elevation Bin") +
   theme_minimal()
 ```
+
+#### Visualization 2
+```{r}
+
+```
+
 
 ## Methods Identification
 
