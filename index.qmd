@@ -10,7 +10,7 @@ bibliography: references.bib
 
 ## Introduction
 
-In this project, we are addressing how the temperature has changed in the US over the last two decades in relation to different altitudes. This is an important topic to cover because in the realm of climate change, higher altitude regions tend to respond to climate change in complex ways [@Penn_LPS_Online_2024a]. Being able to track these interesting changes will provide us with data to help people understand why these regions respond in certain ways. The data we have might also help us understand the highly impacted areas that might be suffering from the impacts of climate change more than other areas. Another reason why this topic is important to study is the fact that higher altitude areas are more sensitive to climate shifts [@ITT_User_2023a]. With the climate shiftinf rapidly, there is much research to be done to see how sensitive these areas are and in what aspect. Lastly, high altitudes contribute to climate variability and play a role in atmospheric circulation patterns [@ITT_User_2023a] so there could be much more effected by the altitudes than just the climate.
+In this project, we are addressing how the temperature has changed in the US over the last couple of decades in relation to different altitudes. This is an important topic to cover because in the realm of climate change, higher altitude regions tend to respond to climate change in complex ways [@Penn_LPS_Online_2024a]. Being able to track these interesting changes will provide us with data to help people understand why these regions respond in certain ways. The data we have might also help us understand the highly impacted areas that might be suffering from the impacts of climate change more than other areas. Another reason why this topic is important to study is the fact that higher altitude areas are more sensitive to climate shifts [@ITT_User_2023a]. With the climate shiftinf rapidly, there is much research to be done to see how sensitive these areas are and in what aspect. Lastly, high altitudes contribute to climate variability and play a role in atmospheric circulation patterns [@ITT_User_2023a] so there could be much more effected by the altitudes than just the climate.
 
 ## Data Exploration
 
@@ -57,16 +57,16 @@ library(readr)
 library(lubridate)
 
 # Read the data
-hot_days <- read_csv("cleaned_90_or_higher.csv", show_col_types = FALSE)
-elevation_data <- read_csv("elevation_US_Cities_cleaned.csv", show_col_types = FALSE)
+hot_days <- read_csv("data/hot_days.csv", show_col_types = FALSE)
+elevation <- read_csv("data/elevation.csv", show_col_types = FALSE)
 
 # Create Elevation column
-elevation_data <- elevation_data %>%
+elevation <- elevation %>%
   mutate(Elevation = as.numeric(`High Feet`)) %>%
   select(City, State, Elevation)
 
 # Merge elevation data with hot_days
-hot_days <- left_join(hot_days, elevation_data, by = c("City", "State"))
+hot_days <- left_join(hot_days, elevation, by = c("City", "State"))
 
 # Now create elevation bins
 hot_days <- hot_days %>%
@@ -85,6 +85,7 @@ hot_days <- hot_days %>%
 
 # Plot trend over time by elevation bin
 hot_days %>%
+  filter(!is.na(elevation_bin)) %>%
   ggplot(aes(x = Year, y = ANN, color = elevation_bin)) +
   stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
   labs(title = "Average Number of Days ≥ 90°F (2000–2020)",
@@ -99,17 +100,17 @@ hot_days %>%
 library(stringr)
 library(dplyr)
 # Load and clean data
-cool_days <- read_csv("cleaned_32_or_cooler.csv", show_col_types = FALSE)
+cool_days <- read_csv("data/cold_days.csv", show_col_types = FALSE)
 
-elevation_data <- read_csv("elevation_US_Cities_cleaned.csv", show_col_types = FALSE)
+elevation <- read_csv("data/elevation.csv", show_col_types = FALSE)
 
 # Create an elevation column 
-elevation_data <- elevation_data %>%
+elevation <- elevation %>%
   mutate(Elevation = as.numeric(`High Feet`)) %>%
   select(City, State, Elevation)
 
 # Merge elevation data with hot_days
-cool_days <- left_join(cool_days, elevation_data, by = c("City", "State"))
+cool_days <- left_join(cool_days, elevation, by = c("City", "State"))
 
 # Now create elevation bins
 cool_days <- cool_days %>%
@@ -127,8 +128,11 @@ cool_days <- cool_days %>%
 cool_days_filtered <- cool_days %>%
   dplyr::filter(Year >= 2000 & Year <= 2020)
 
+
+
 # Plot the trend over time by elevation bin
 cool_days %>%
+  filter(!is.na(elevation_bin)) %>%
   ggplot(aes(x = Year, y = ANN, color = elevation_bin)) +
   stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
   labs(title = "Average Number of Days ≤ 32°F (2000–2020)",
