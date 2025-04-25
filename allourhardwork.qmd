@@ -3,14 +3,11 @@ title: "allourhardwork"
 format: html
 ---
 
-## making the dates in format
-```{r}
+## making the dates in format YYYY-MM-DD
 library(lubridate)
 
 hot_days$Start_Date <- ym(hot_days$Start_Date)
 
 cold_days$Start_date <- ym(cold_days$Start_Date)
 
-
-```
 
