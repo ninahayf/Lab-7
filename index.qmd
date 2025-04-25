@@ -16,19 +16,19 @@ In this project, we are addressing how the temperature has changed in the US ove
 
 The data for this project was obtained from the NOAA website. The data includes:
 
--   **32_or_cooler.txt**: Number of days with minimum temperature ≤ 32°F
+-   **cold_days.csv**: Number of days with minimum temperature ≤ 32°F
 
--   **90_or_higher.txt**: Number of days with maximum temperature ≥ 90°F
+-   **hot_days.csv**: Number of days with maximum temperature ≥ 90°F
 
 -   **highest_temp.txt**: Highest recorded temperature per month
 
--   **lowest.temp.txt**: Lowest recorded temperature per month
+-   **lowest.temp.csv**: Lowest recorded temperature per month
 
--   **humidity.txt**: Annual relative humidity by location
+-   **humidity.csv**: Annual relative humidity by location
 
--   **nrmavg.txt, nrmmax.txt, and nrmmin.txt**: Normal average, maximum, and minimum daily temperatures
+-   **nrmavg.csv, nrmmax.csv, and nrmmin.csv**: Normal average, maximum, and minimum daily temperatures
 
--   **elevation_US_Cities.csv**: elevation data with the peaks and dips of the major US cities
+-   **elevation.csv**: elevation data with the peaks and dips of the major US cities
 
 Each dataset includes location information (e.g., city or station), date/year, and the measurement of interest. These will be cross-referenced with elevation data to determine altitudinal patterns.
 
@@ -43,10 +43,10 @@ We focused on data components that show temperature change and compared their al
 - **ANOVA**: Tested for significant differences in climate changes across different elevation bins
 
 ### Data cleaning 
-- Standardize temperature units (°F across all data)
-- Remove rows with missing values or null values 
-- Filter the time range to 2000-2020
-- Merge data by station ID and region
+- Standardized temperature units (°F across all data)
+- Removed rows with missing values or null values 
+- Filtered the time range to 2000-2020
+- Merged data by station ID and region
 - Create altitude bins (<1000 ft, 1000-3000 ft, >3000 ft)
 
 ### Data Visualization 
