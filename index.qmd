@@ -20,7 +20,7 @@ The data for this project was obtained from the NOAA website. The data includes:
 
 -   **hot_days.csv**: Number of days with maximum temperature ≥ 90°F
 
--   **highest_temp.txt**: Highest recorded temperature per month
+-   **highest_temp.csv**: Highest recorded temperature per month
 
 -   **lowest.temp.csv**: Lowest recorded temperature per month
 

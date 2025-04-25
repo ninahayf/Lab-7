@@ -11,3 +11,35 @@ hot_days$Start_Date <- ym(hot_days$Start_Date)
 cold_days$Start_date <- ym(cold_days$Start_Date)
 
 
+## reading in data tables 
+library(readr) 
+
+cold_days <- read_csv("data/cold_days.csv")
+View(cold_days)
+
+hot_days <- read_csv("data/hot_days.csv")
+View(hot_days)
+
+elevation <- read_csv("data/elevation.csv")
+View(elevation)
+
+high_temp <- read_csv("data/highest_temp.csv")
+View(high_temp)
+
+humid <- read_csv("data/humidity.csv")
+View(humid)
+
+low_temp <- read_csv("data/lowest_temp.csv")
+View(low_temp)
+
+nrmavg <- read_csv("data/nrmavg.csv")
+View(nrmavg)
+
+nrmmax <- read_csv("data/nrmmax.csv")
+View(nrmmax)
+
+nrmmin <- read_csv("data/nrmmin.csv")
+View(nrmmin)
+
+
+
