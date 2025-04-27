@@ -43,3 +43,23 @@ View(nrmmin)
 
 
 
+## Bar Graph comparing Denvers elevation to New Orleans elevation
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+elev_data <- read.csv("data/elevation.csv")
+
+elev_data$High.Feet <- as.numeric(gsub(",", "", elev_data$High.Feet))
+elev_data$Low.Feet <- as.numeric(gsub(",", "", elev_data$Low.Feet))
+
+two_cities <- elev_data %>%
+  filter(City %in% c("DENVER", "NEW ORLEANS"))
+
+ggplot(two_cities, aes(x = City, y = High.Feet)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "City", y = "Elevation (High Feet)", title = "City Elevation Comparison") +
+  theme_minimal()
+```
+
