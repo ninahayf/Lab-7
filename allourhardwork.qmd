@@ -41,6 +41,8 @@ View(nrmmax)
 nrmmin <- read_csv("data/nrmmin.csv")
 View(nrmmin)
 
+UHI <- read_csv("data/UHI.csv")
+View(UHI)
 
 
 ## Bar Graph comparing Denvers elevation to New Orleans elevation
