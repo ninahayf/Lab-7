@@ -10,7 +10,7 @@ bibliography: references.bib
 
 ## Introduction
 
-In this project, we are addressing how the temperature has changed in the US over the last couple of decades in relation to different altitudes. This is an important topic to cover because in the realm of climate change, higher altitude regions tend to respond to climate change in complex ways [@Penn_LPS_Online_2024a]. Being able to track these interesting changes will provide us with data to help people understand why these regions respond in certain ways. The data we have might also help us understand the highly impacted areas that might be suffering from the impacts of climate change more than other areas. Another reason why this topic is important to study is the fact that higher altitude areas are more sensitive to climate shifts [@ITT_User_2023a]. With the climate shiftinf rapidly, there is much research to be done to see how sensitive these areas are and in what aspect. Lastly, high altitudes contribute to climate variability and play a role in atmospheric circulation patterns [@ITT_User_2023a] so there could be much more effected by the altitudes than just the climate.
+In this project, we are addressing how the temperature has changed in the US over the last couple of decades in relation to different altitudes. This is an important topic to cover because in the realm of climate change, higher altitude regions tend to respond to climate change in complex ways [@Penn_LPS_Online_2024a]. Being able to track these interesting changes will provide us with data to help people understand why these regions respond in certain ways. The data we have will also help us understand the highly impacted areas that might be suffering from the impacts of climate change more than other areas. Another reason why this topic is important to study is the fact that higher altitude areas are more sensitive to climate shifts [@ITT_User_2023a]. With the climate shifting rapidly, there is much research to be done to see how sensitive these areas are and in what aspect. We will also be including Urban Heat Island effects in Denver and New Orleans. The UHI effect is important to include because at lower elevations, its probably more humid and has lots of concrete, which makes the summers much hotter. So, the urban heat island effect might have New Orleans warming faster than Denver. Lastly, high altitudes contribute to climate variability and play a role in atmospheric circulation patterns [@ITT_User_2023a] so there could be much more effected by the altitudes than just the climate.
 
 ## Data Exploration
 
@@ -26,28 +26,35 @@ The data for this project was obtained from the NOAA website. The data includes:
 
 -   **humidity.csv**: Annual relative humidity by location
 
--   **nrmavg.csv, nrmmax.csv, and nrmmin.csv**: Normal average, maximum, and minimum daily temperatures
+-   **nrmavg.csv, nrmmax.csv, and nrmmin.csv**: Normal average, maximum, and minimum daily temperatures 
 
 -   **elevation.csv**: elevation data with the peaks and dips of the major US cities
 
-Each dataset includes location information (e.g., city or station), date/year, and the measurement of interest. These will be cross-referenced with elevation data to determine altitudinal patterns.
+-   **UHI.csv**: Urban heat island effect in 2023 for each city in the US
 
-We focused on data components that show temperature change and compared their altitudes to see if different altitudes are affected by climate change differently. Specifically, we:
+Each dataset includes location information (e.g., city or station), date/year, and the measurement of interest. We will use this data to compare the data from Denver CO, one of the highest elevation cities, to New Orleans LA, one of the lowest elevation cities, to see if there is a difference in climate change between a high elevation city and a low elevation city. 
 
-- Analyzed the trend in 90°F+ and ≤32°F days from 2000 to 2020
-- Investigated elevation bins to compare temperature trends
-- Looked at changes in humidity levels at varying altitudes
+We focused on data components that show temperature change, urban heat island effect, and altitudes to see if Denver is more impacted by climate change than New Orleans.
+
+Specifically, we:
+
+- Compared Denver's elevation to New Orleans elevation. 
+- Compared the amount of days above 90°F and below ≤32°F in Denver vs New Orleans. 
+- Investigated elevation bins to compare temperature trends. 
+- Looked at changes in humidity levels at varying altitudes. 
+- Compared Urban Heat Island effects to see if one city is more impacted by it over the other. 
 
 ### Statistical Tests 
 - **Linear Regression**: Modeled changes in temperature-related metrics over time, using elevation as a predictor
 - **ANOVA**: Tested for significant differences in climate changes across different elevation bins
+- **Bar Graph**
 
 ### Data cleaning 
 - Standardized temperature units (°F across all data)
-- Removed rows with missing values or null values 
-- Filtered the time range to 2000-2020
-- Merged data by station ID and region
-- Create altitude bins (<1000 ft, 1000-3000 ft, >3000 ft)
+- Removed rows with missing values or null values
+- Merged data by station ID
+- Create elevation bins (<1000 ft, 1000-3000 ft, >3000 ft)
+- Made sure all column names are the same 
 
 ### Data Visualization 
 #### Visualization 1
@@ -145,4 +152,12 @@ cool_days %>%
 
 ## Methods Identification
 
-Within RStudio, we can perform spatial analysis to show regional variations in temperature. We can do this by using mapping tools like ggplot2, sf, or terra. We were also thinking about dividing the data by months and possibly seasonal as well. We will assess how temperature changes over time using line graphs or trend lines, then compare them to the region they are in. We could include more supplemental data like normal temperatures to compare what the temperatures usually look like versus what they are now. We could also include things like humidity because humidity changes a lot in different elevations so it might be something important to keep track of. Some potential challenges we might see in the data is missing values or unavailable pieces of data. It also might have regional variation where not all areas have elevation data so we will not be able to use it. Some potential challenges we see in the methods include the complexity to compare data over two decades across an entire country. So it is very important to focus on organizing and cleaning the data. It also may be hard to strictly distinguish between correlation and causation. Lastly, the selected methods will help us get to our final goal because these methods help us perform spatial and temporal analysis to visualize the data and support our claim. We can also compare our findings to try and find a possible cause or a strong influence for temperature changes.
+Within RStudio, we can perform spatial analysis to show regional variations in temperature. We can do this by using mapping tools like ggplot2, sf, or terra. We will assess how temperature changes over time using line graphs or trend lines for each city, then compare them to each other. We could include more supplemental data like normal temperatures to compare what the temperatures usually look like versus what they are now. We could also include things like humidity because humidity changes a lot in different elevations so it might be something important to keep track of. Some potential challenges we might see in the data is missing values or unavailable pieces of data. It also might have regional variation where not all areas have elevation data so we will not be able to use it. Some potential challenges we see in the methods include the complexity to compare data over two decades. So it is very important to focus on organizing and cleaning the data. It also may be hard to strictly distinguish between correlation and causation. Lastly, the selected methods will help us get to our final goal because these methods help us perform spatial and temporal analysis to visualize the data and support our claim. We can also compare our findings to try and find a possible cause or a strong influence for temperature changes.
+
+## Results 
+
+
+
+
+
+
