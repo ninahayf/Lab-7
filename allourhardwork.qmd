@@ -64,4 +64,45 @@ ggplot(two_cities, aes(x = City, y = High.Feet)) +
   labs(x = "City", y = "Elevation (High Feet)", title = "City Elevation Comparison") +
   theme_minimal()
 ```
+With Denver's elevation being significantly higher than New Orleans will give us a foundations to compare the extreme changes that happen at different elevations. 
+
+
+## Bar Plot comparing UHI temperature differences 
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+UHI <- read.csv("data/UHI.csv")
+
+# Clean column names
+names(UHI) <- gsub(" ", "_", names(UHI))
+
+# Filter for Denver and New Orleans
+city_uhi <- UHI %>%
+  filter(City %in% c("Denver", "New Orleans"))
+
+# Select only the relevant columns (City and UHI temperature effect)
+city_uhi <- city_uhi %>%
+  select(City, Citywide.urban.heat.island.effect..rolled.up.from.census.tract.data..weighted.by.area..in.degrees.F.)
+
+# Rename the UHI column for clarity
+colnames(city_uhi)[2] <- "UHI_Effect_F"
+
+# Plot the UHI temperature differences
+ggplot(city_uhi, aes(x = City, y = UHI_Effect_F, fill = City)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  geom_text(aes(label = round(UHI_Effect_F, 1)), vjust = -0.5) +  # Add value labels above bars
+  labs(
+    title = "Urban Heat Island Effect: Denver vs New Orleans",
+    x = "City",
+    y = "UHI Temperature Difference (°F)"
+  ) +
+  scale_fill_manual(values = c("skyblue", "pink")) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+This plot shows the UHI difference (in °F) for both cities. New Orleans's higher UHI is expected because of the low-elevation and humidity and the fact that it is pretty warm there year round. This creates a greater challenge for New Orleans when it comes to managing heat. Denver's UHI isnt nearly as bad because of the dry air and higher elevation. 
+
+
 
