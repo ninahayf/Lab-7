@@ -154,8 +154,6 @@ cool_days %>%
 
 Within RStudio, we can perform spatial analysis to show regional variations in temperature. We can do this by using mapping tools like ggplot2, sf, or terra. We will assess how temperature changes over time using line graphs or trend lines for each city, then compare them to each other. We could include more supplemental data like normal temperatures to compare what the temperatures usually look like versus what they are now. We could also include things like humidity because humidity changes a lot in different elevations so it might be something important to keep track of. Some potential challenges we might see in the data is missing values or unavailable pieces of data. It also might have regional variation where not all areas have elevation data so we will not be able to use it. Some potential challenges we see in the methods include the complexity to compare data over two decades. So it is very important to focus on organizing and cleaning the data. It also may be hard to strictly distinguish between correlation and causation. Lastly, the selected methods will help us get to our final goal because these methods help us perform spatial and temporal analysis to visualize the data and support our claim. We can also compare our findings to try and find a possible cause or a strong influence for temperature changes.
 
-## Results 
-
 
 
 
