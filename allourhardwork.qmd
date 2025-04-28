@@ -92,68 +92,7 @@ ggplot(humid_long, aes(x = Month, y = Humidity, color = City, group = interactio
 ```
 New Orleans towering over Denver in humidity year-round. 
 
-
-
-## Bar Graph comparing Denvers elevation to New Orleans elevation
-```{r}
-library(readr)
-library(dplyr)
-library(ggplot2)
-
-elev_data <- read.csv("data/elevation.csv")
-
-elev_data$High.Feet <- as.numeric(gsub(",", "", elev_data$High.Feet))
-elev_data$Low.Feet <- as.numeric(gsub(",", "", elev_data$Low.Feet))
-
-two_cities <- elev_data %>%
-  filter(City %in% c("DENVER", "NEW ORLEANS"))
-
-ggplot(two_cities, aes(x = City, y = High.Feet)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  labs(x = "City", y = "Elevation (High Feet)", title = "City Elevation Comparison") +
-  theme_minimal()
-```
-With Denver's elevation being significantly higher than New Orleans will give us a foundations to compare the extreme changes that happen at different elevations. 
-
-
-## Bar Plot comparing UHI temperature differences 
-```{r}
-library(readr)
-library(dplyr)
-library(ggplot2)
-
-UHI <- read.csv("data/UHI.csv")
-
-# Clean column names
-names(UHI) <- gsub(" ", "_", names(UHI))
-
-# Filter for Denver and New Orleans
-city_uhi <- UHI %>%
-  filter(City %in% c("Denver", "New Orleans"))
-
-# Select only the relevant columns (City and UHI temperature effect)
-city_uhi <- city_uhi %>%
-  select(City, Citywide.urban.heat.island.effect..rolled.up.from.census.tract.data..weighted.by.area..in.degrees.F.)
-
-# Rename the UHI column for clarity
-colnames(city_uhi)[2] <- "UHI_Effect_F"
-
-# Plot the UHI temperature differences
-ggplot(city_uhi, aes(x = City, y = UHI_Effect_F, fill = City)) +
-  geom_bar(stat = "identity", width = 0.6) +
-  geom_text(aes(label = round(UHI_Effect_F, 1)), vjust = -0.5) +  # Add value labels above bars
-  labs(
-    title = "Urban Heat Island Effect: Denver vs New Orleans",
-    x = "City",
-    y = "UHI Temperature Difference (°F)"
-  ) +
-  scale_fill_manual(values = c("skyblue", "pink")) +
-  theme_minimal() +
-  theme(legend.position = "none")
-```
-This plot shows the UHI difference (in °F) for both cities. New Orleans's higher UHI is expected because of the low-elevation and humidity and the fact that it is pretty warm there year round. This creates a greater challenge for New Orleans when it comes to managing heat. Denver's UHI isn't nearly as bad because of the dry air and higher elevation. 
-
-## Comparing # of hot & cold days between Denver and New Orleans in a Bar Plot
+## Comparing # of hot & cold days between Denver and New Orleans in a Bar Plot (KEEP)
 ```{r}
 library(dplyr)
 library(ggplot2)
@@ -218,52 +157,58 @@ ggplot(combined_days, aes(x = City, y = Days, fill = type)) +
 ```
 New Orleans has more missing data values than Denver did, hence why the dramatic difference. Setting aside climate change, we know that New Orleans has significantly more hot days than Denver because its closer to the equator. 
 
-## 
+
+## Multiple Linear Regression Plot 
 ```{r}
+# Read in data 
+library(readr)
 library(dplyr)
 library(ggplot2)
+library(tidyr)
 
-# Read the data
-UHI <- read.csv("data/UHI.csv")
-humidity <- read.csv("data/humidity.csv")
-nrmavg <- read.csv("data/nrmavg.csv")
+climate_data <- read_csv("data/denver_neworleans.csv")
+elevation <- read_csv("data/elevation.csv")
+UHI <- read_csv("data/UHI.csv")
 
-# Clean and prepare UHI data
-UHI_clean <- UHI %>%
-  filter(City %in% c("Denver", "New Orleans")) %>%
-  select(City, Year, Citywide.urban.heat.island.effect..rolled.up.from.census.tract.data..weighted.by.population.exposure..in.degrees.F.)
+# Clean and prep datasets 
+elevation <- elevation %>%
+  mutate(Elevation_ft = ( `High Feet` + `Low Feet` ) / 2) %>%
+  select(City, Elevation_ft)
 
-# Clean humidity data (assume columns are City, Year, Humidity)
-humidity_clean <- humidity %>%
-  filter(City %in% c("DENVER", "NEW ORLEANS")) %>%
-  select(City, Year, ANN)
+UHI <- UHI %>%
+  rename(UHI_Effect = `Citywide urban heat island effect (rolled-up from census tract data, weighted by area, in degrees F)`) %>%
+  select(City, UHI_Effect)
 
-# Clean nrmavg data (normal average temperatures)
-nrmavg_clean <- nrmavg %>%
-  filter(City %in% c("DENVER", "NEW ORLEANS")) %>%
-  select(City, Year, nrmavg)
+final_data$City <- toupper(final_data$City)
+UHI$City <- toupper(UHI$City)
 
-# Merge all datasets by City and Year
-combined_data <- UHI_clean %>%
-  left_join(humidity_clean, by = c("City", "Year")) %>%
-  left_join(nrmavg_clean, by = c("City", "Year"))
+# Merge everything 
+final_data <- climate_data %>%
+  left_join(elevation, by = "City") %>%
+  left_join(UHI, by = "City")
 
-# Now combined_data contains: City, Year, UHI, Humidity, and Normal Average Temperature
+# Remove rows with NA values in the necessary columns
+final_data_clean <- final_data %>%
+  filter(!is.na(TAVG), !is.na(Elevation_ft), !is.na(UHI_Effect))
 
-# Visualize: Plotting UHI, humidity, and normal temperature over time
-ggplot(combined_data, aes(x = Year)) +
-  geom_line(aes(y = nrmavg, color = "Normal Temperature"), size = 1) +
-  geom_line(aes(y = Citywide.urban.heat.island.effect..rolled.up.from.census.tract.data..weighted.by.population.exposure..in.degrees.F., color = "UHI"), size = 1) +
-  geom_line(aes(y = Annual.relative.humidity, color = "Humidity"), size = 1) +
-  facet_wrap(~City) +
-  labs(
-    title = "Temperature, UHI, and Humidity Trends: Denver vs New Orleans",
-    x = "Year",
-    y = "Value",
-    color = "Variable"
-  ) +
-  theme_minimal() +
-  scale_color_manual(values = c("blue", "red", "green"))
+# Build model 
+model <- lm(TAVG ~ Elevation_ft + UHI_Effect, data = final_data_clean)
+
+summary(model)
+
+# Scatter plot for Elevation vs TAVG
+ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = City)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "green") +
+  labs(title = "Elevation vs. Temperature (TAVG)", x = "Elevation (ft)", y = "Temperature (TAVG)") +
+  scale_color_manual(values = c("NEW ORLEANS" = "pink", "DENVER" = "skyblue"))
+
+# Scatter plot for UHI Effect vs TAVG
+ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "yellow") +
+  labs(title = "UHI Effect vs. Temperature (TAVG)", x = "UHI Effect (°F)", y = "Temperature (TAVG)") +
+  scale_color_manual(values = c("NEW ORLEANS" = "pink", "DENVER" = "skyblue"))
 ```
 
 
