@@ -222,7 +222,7 @@ ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)) +
 ```
 
 
-# Comparing New Orleans average temperature changes over 20 years to Denvers 
+## Comparing New Orleans average temperature changes over 20 years to Denvers 
 ```{r}
 library(tidyverse)
 temp_data <- read_csv("data/denver_neworleans.csv")
