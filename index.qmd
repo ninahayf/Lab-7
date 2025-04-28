@@ -30,7 +30,7 @@ The data for this project was obtained from the NOAA website. The data includes:
 
 -   **elevation.csv**: elevation data with the peaks and dips of the major US cities
 
--   **UHI.csv**: Urban heat island effect in 2023 for each city in the US
+-   **UHI.csv**: Urban heat island effect in 2023 for each city in the US [@Climate_Matters_2023]
 
 Each dataset includes location information (e.g., city or station), date/year, and the measurement of interest. We will use this data to compare the data from Denver CO, one of the highest elevation cities, to New Orleans LA, one of the lowest elevation cities, to see if there is a difference in climate change between a high elevation city and a low elevation city. 
 
@@ -47,7 +47,7 @@ Specifically, we:
 ### Statistical Tests 
 - **Linear Regression**: Modeled changes in temperature-related metrics over time, using elevation as a predictor
 - **ANOVA**: Tested for significant differences in climate changes across different elevation bins
-- **Bar Graph**
+- **Bar Graph**: 
 
 ### Data cleaning 
 - Standardized temperature units (°F across all data)

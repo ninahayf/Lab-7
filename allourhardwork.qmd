@@ -48,6 +48,52 @@ CO_LA <- read_csv("data/denver_neworleans.csv")
 View(CO_LA)
 
 
+## Combining A (afternoon) and M (morning) data within humidity dataset 
+humid <- read.csv("data/humidity.csv")
+
+colnames(humid)
+
+colnames(humid) <- c("Station ID", "City", "State", "Start Date", "End Date", "JAN_M", "JAN_A", "FEB_M", "FEB_A", "MAR_M", "MAR_A", "APR_M", "APR_A", "MAY_M", "MAY_A", "JUN_M", "JUN_A", "JUL_M", "JUL_A", "AUG_M", "AUG_A", "SEP_M", "SEP_A", "OCT_M", "OCT_A", "NOV_M", "NOV_A", "DEC_M", "DEC_A", "ANN_M", "ANN_A")
+
+colnames(humid)
+
+# Line plot comparing Den to NewO humidity 
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Filter data for Den and NewO
+humid_filtered <- humid %>%
+  filter(City %in% c("DENVER", "NEW ORLEANS")) %>%
+  select(City, JAN_M, JAN_A, FEB_M, FEB_A, MAR_M, MAR_A, APR_M, APR_A, MAY_M, MAY_A, JUN_M, JUN_A, JUL_M, JUL_A, AUG_M, AUG_A, SEP_M, SEP_A, OCT_M, OCT_A, NOV_M, NOV_A, DEC_M, DEC_A, ANN_M, ANN_A)
+
+# Reshape data
+humid_long <- humid_filtered %>%
+  pivot_longer(cols = JAN_M:DEC_A,  
+               names_to = c("Month", "Time"), 
+               names_pattern = "(\\w{3})_(\\w)",
+               values_to = "Humidity")
+
+head(humid_long)
+```
+```{r}
+library(ggplot2)
+
+ggplot(humid_long, aes(x = Month, y = Humidity, color = City, group = interaction(City, Month))) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Monthly Humidity Comparison: Denver vs. New Orleans", 
+       x = "Month", 
+       y = "Humidity (%)") +
+  scale_x_discrete(limits = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+New Orleans towering over Denver in humidity year-round. 
+
+
+
 ## Bar Graph comparing Denvers elevation to New Orleans elevation
 ```{r}
 library(readr)
@@ -219,4 +265,10 @@ ggplot(combined_data, aes(x = Year)) +
   theme_minimal() +
   scale_color_manual(values = c("blue", "red", "green"))
 ```
+
+
+
+
+
+
 
