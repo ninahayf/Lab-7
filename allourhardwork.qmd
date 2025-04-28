@@ -62,6 +62,13 @@ colnames(humid)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(readr)
+
+# Load in Data
+humid <- read.csv("data/humidity.csv")
+
+# Fix colnames in humid data
+colnames(humid) <- c("Station ID", "City", "State", "Start Date", "End Date", "JAN_M", "JAN_A", "FEB_M", "FEB_A", "MAR_M", "MAR_A", "APR_M", "APR_A", "MAY_M", "MAY_A", "JUN_M", "JUN_A", "JUL_M", "JUL_A", "AUG_M", "AUG_A", "SEP_M", "SEP_A", "OCT_M", "OCT_A", "NOV_M", "NOV_A", "DEC_M", "DEC_A", "ANN_M", "ANN_A")
 
 # Filter data for Den and NewO
 humid_filtered <- humid %>%
@@ -88,11 +95,12 @@ ggplot(humid_long, aes(x = Month, y = Humidity, color = City, group = interactio
        x = "Month", 
        y = "Humidity (%)") +
   scale_x_discrete(limits = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")) +
+    scale_color_manual(values = c("DENVER" = "skyblue", "NEW ORLEANS" = "deeppink")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 New Orleans towering over Denver in humidity year-round. 
 
-## Comparing # of hot & cold days between Denver and New Orleans in a Bar Plot (KEEP)
+## Comparing # of hot & cold days between Denver and New Orleans in a Bar Plot
 ```{r}
 library(dplyr)
 library(ggplot2)
@@ -153,12 +161,12 @@ ggplot(combined_days, aes(x = City, y = Days, fill = type)) +
     fill = "Temperature Type"
   ) +
   theme_minimal() +
-  scale_fill_manual(values = c("blue", "pink"))
+  scale_fill_manual(values = c("skyblue", "deeppink"))
 ```
 New Orleans has more missing data values than Denver did, hence why the dramatic difference. Setting aside climate change, we know that New Orleans has significantly more hot days than Denver because its closer to the equator. 
 
 
-## Multiple Linear Regression Plot 
+## Linear Regression Plot 
 ```{r}
 # Read in data 
 library(readr)
@@ -182,6 +190,8 @@ UHI <- UHI %>%
 final_data$City <- toupper(final_data$City)
 UHI$City <- toupper(UHI$City)
 
+View(final_data)
+
 # Merge everything 
 final_data <- climate_data %>%
   left_join(elevation, by = "City") %>%
@@ -201,19 +211,92 @@ ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = City)) +
   geom_point() +
   geom_smooth(method = "lm", col = "green") +
   labs(title = "Elevation vs. Temperature (TAVG)", x = "Elevation (ft)", y = "Temperature (TAVG)") +
-  scale_color_manual(values = c("NEW ORLEANS" = "pink", "DENVER" = "skyblue"))
+  scale_color_manual(values = c("NEW ORLEANS" = "deeppink", "DENVER" = "skyblue"))
 
 # Scatter plot for UHI Effect vs TAVG
 ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)) +
   geom_point() +
   geom_smooth(method = "lm", col = "yellow") +
   labs(title = "UHI Effect vs. Temperature (TAVG)", x = "UHI Effect (°F)", y = "Temperature (TAVG)") +
-  scale_color_manual(values = c("NEW ORLEANS" = "pink", "DENVER" = "skyblue"))
+  scale_color_manual(values = c("NEW ORLEANS" = "deeppink", "DENVER" = "skyblue"))
 ```
 
 
+# Comparing New Orleans average temperature changes over 20 years to Denvers 
+```{r}
+library(tidyverse)
+temp_data <- read_csv("data/denver_neworleans.csv")
 
+temp_data_clean <- temp_data %>% 
+  filter(!is.na(TAVG))
 
+denver_data <- temp_data_clean %>% filter(City == "DENVER")
+new_orleans_data <- temp_data_clean %>% filter(City == "NEW ORLEANS")
+
+ggplot(denver_data, aes(x = Year, y = TAVG)) +
+  geom_line(color = "skyblue", linewidth = 1) +
+  geom_point(color = "skyblue") +
+  labs(title = "Average Temperature Over Time - Denver",
+       x = "Year",
+       y = "Average Temperature (TAVG)") +
+  theme_minimal()
+
+ggplot(new_orleans_data, aes(x = Year, y = TAVG)) +
+  geom_line(color = "deeppink", linewidth = 1) +
+  geom_point(color = "deeppink") +
+  labs(title = "Average Temperature Over Time - New Orleans",
+       x = "Year",
+       y = "Average Temperature (TAVG)") +
+  theme_minimal()
+```
+
+# More Graphs
+```{r}
+# Load libraries
+library(tidyverse)
+
+# Read and clean the data
+temp_data <- read_csv("data/denver_neworleans.csv") %>%
+  filter(!is.na(TAVG))  # Drop missing average temps if needed
+
+# Focus only on the important columns
+selected_vars <- temp_data %>%
+  select(City, Year, EMAXT, EMINT, TMAX, TMIN, DT32, DX90)
+
+# Pivot data longer so each measurement type is a "variable"
+long_temp_data <- selected_vars %>%
+  pivot_longer(cols = c(EMAXT, EMINT, TMAX, TMIN, DT32, DX90),
+               names_to = "Measurement",
+               values_to = "Value")
+
+# Separate data for Denver
+denver_data <- long_temp_data %>%
+  filter(City == "DENVER")
+
+# Separate data for New Orleans
+new_orleans_data <- long_temp_data %>%
+  filter(City == "NEW ORLEANS")
+
+# Plot for Denver
+ggplot(denver_data, aes(x = Year, y = Value)) +
+  geom_line(color = "skyblue", linewidth = 1) +
+  geom_point(color = "skyblue") +
+  facet_wrap(~ Measurement, scales = "free_y") +
+  labs(title = "Denver",
+       x = "Year",
+       y = "Value") +
+  theme_minimal()
+
+# Plot for New Orleans
+ggplot(new_orleans_data, aes(x = Year, y = Value)) +
+  geom_line(color = "deeppink", linewidth = 1) +
+  geom_point(color = "deeppink") +
+  facet_wrap(~ Measurement, scales = "free_y") +
+  labs(title = "New Orleans",
+       x = "Year",
+       y = "Value") +
+  theme_minimal()
+```
 
 
 
