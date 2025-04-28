@@ -1,5 +1,5 @@
 ---
-title: "Altitudinal Climate Change Across the US"
+title: "Altitudinal Climate Change (Denver, CO vs New Orleans, LA)"
 authors:
   - name: Nina Hayford & Sierra Mattiar
     affiliation: The University
@@ -7,157 +7,199 @@ authors:
     corresponding: true
 bibliography: references.bib
 ---
+# Abstract
 
-## Introduction
 
-In this project, we are addressing how the temperature has changed in the US over the last couple of decades in relation to different altitudes. This is an important topic to cover because in the realm of climate change, higher altitude regions tend to respond to climate change in complex ways [@Penn_LPS_Online_2024a]. Being able to track these interesting changes will provide us with data to help people understand why these regions respond in certain ways. The data we have will also help us understand the highly impacted areas that might be suffering from the impacts of climate change more than other areas. Another reason why this topic is important to study is the fact that higher altitude areas are more sensitive to climate shifts [@ITT_User_2023a]. With the climate shifting rapidly, there is much research to be done to see how sensitive these areas are and in what aspect. We will also be including Urban Heat Island effects in Denver and New Orleans. The UHI effect is important to include because at lower elevations, its probably more humid and has lots of concrete, which makes the summers much hotter. So, the urban heat island effect might have New Orleans warming faster than Denver. Lastly, high altitudes contribute to climate variability and play a role in atmospheric circulation patterns [@ITT_User_2023a] so there could be much more effected by the altitudes than just the climate.
+# Introduction
+    How much does the temperature in high altitude areas (Denver CO) differ from low altitude areas (New Orleans LA)? It might not seem too different when you’re within 1000 feet of each other, but what happens when it’s a 5000 feet difference between one elevation and another? According to [@Penn_LPS_Online_2024a], higher altitude regions tend to respond to climate change in complex ways. Being able to track these interesting changes will provide us with data to help people understand why high and low elevations are impacted by climate change differently. If we manage climate change the same in both regions, we might not be helping anyone because the two areas are affected by climate change so differently. The data we have will help us understand the highly impacted areas that might be suffering from the impacts of climate change more than other areas. Another reason why this topic is important to study is the fact that higher altitude areas are more sensitive to climate shifts [@ITT_User_2023a]. With the climate shifting rapidly, there is much research to be done to see how sensitive these areas are and in what aspect. We will also be including Urban Heat Island effects in Denver and New Orleans. The UHI effect is important to include because at lower elevations, it is probably more humid and has lots of concrete, which makes the summers much hotter. So, the urban heat island effect might have New Orleans warming faster than Denver. Lastly, high altitudes contribute to climate variability and play a role in atmospheric circulation patterns [@ITT_User_2023a] so there could be much more effected by the altitudes than just the climate. In this project, we will be creating visualizations to show what climatic variables are making high and low altitudes respond differently to climate change. 
 
-## Data Exploration
+# Methods
+    We started the project with collecting all the data we needed to be able to successfully show how climate change impacted the two different regions. Thankfully, we were able to find all our data within the NOAA website. Most of the data was in the “Comparative Climatic Data” section of NOAA, the denver_neworleans.csv was found in the “Climate Data Online Search” section of NOAA [@Climate_Matters_2023]. Lastly, we needed elevation data, which we collected from the USGS website.
+    After we collected all the data, we needed to see if the data had any missing values. We went through each dataset in excel and replaced the missing values with NA’s and made sure the column names all matched up in each dataset. Then, we transported the data to RStudio in a csv form. We renamed all the dataset so we could keep track of them and so they would be easier to use in code. The data we obtained and the names we used for them were:  
+**cold_days.csv**: Number of days with minimum temperature ≤ 32°F, **denver_neworleans.csv**: Annual temperature data from 2000-2020 for New Orleans and Denver, **elevation.csv**: Elevation data with the peaks and dips of the major US cities, **hightest_temp.csv**: Highest recorded temperature per month, **hot_days.csv**: Number of days with maximum temperature ≥ 90°F, **humidity.csv**: Annual relative humidity by location, **lowest_temp.csv**: Lowest recorded temperature per month, **nrmavg.csv**: Normal daily average temperature, **nrmmax.csv**: Normal daily maximum temperature, **nrmmin.csv**: Normal daily minimum temperature, and **UHI.csv**: Urban heat island effect in 2023 for each city in the US. Each dataset included location information like city, station_ID, or state, then date/year, and the measurement of interest.We then decided to make many visualizations. (1) a line plot comparing humidity between Denver and New Orleans, (2) a bar plot comparing hot and cold days in Denver vs New Orleans, (3) a liner regression model showing elevation vs average annual temperature in Denver vs New Orleans, and (4) a linear regression model showing urban heat index effect vs average annual temperature in Denver vs New Orleans. 
 
-The data for this project was obtained from the NOAA website. The data includes:
-
--   **cold_days.csv**: Number of days with minimum temperature ≤ 32°F
-
--   **hot_days.csv**: Number of days with maximum temperature ≥ 90°F
-
--   **highest_temp.csv**: Highest recorded temperature per month
-
--   **lowest.temp.csv**: Lowest recorded temperature per month
-
--   **humidity.csv**: Annual relative humidity by location
-
--   **nrmavg.csv, nrmmax.csv, and nrmmin.csv**: Normal average, maximum, and minimum daily temperatures 
-
--   **elevation.csv**: elevation data with the peaks and dips of the major US cities
-
--   **UHI.csv**: Urban heat island effect in 2023 for each city in the US [@Climate_Matters_2023]
-
--   **denver_neworleans.csv**: Specific data for Denver and New Orleans, including - EMINT (extreme minimum temp), EMAXT (Extreme maximum temp), TAVG (temp average), TMIN (temp minimum), TMAX (temp maximum). 
-
-Each dataset includes location information (e.g., city or station), date/year, and the measurement of interest. We will use this data to compare the data from Denver CO, one of the highest elevation cities, to New Orleans LA, one of the lowest elevation cities, to see if there is a difference in climate change between a high elevation city and a low elevation city. 
-
-We focused on data components that show temperature change, urban heat island effect, and altitudes to see if Denver is more impacted by climate change than New Orleans.
-
-Specifically, we:
-
-- Compared Denver's elevation to New Orleans elevation. 
-- Compared the amount of days above 90°F and below ≤32°F in Denver vs New Orleans. 
-- Investigated elevation bins to compare temperature trends. 
-- Looked at changes in humidity levels at varying altitudes. 
-- Compared Urban Heat Island effects to see if one city is more impacted by it over the other. 
-
-### Statistical Tests 
-- **Multiple Linear Regression**: Modeled changes in temperature-related metrics over time, using elevation as a predictor
-- **ANOVA**: Tested for significant differences in climate changes across different elevation bins
-- **Bar Plot**: 
-
-### Data cleaning 
-- Standardized temperature units (°F across all data)
-- Removed rows with missing values or null values
-- Merged data by station ID
-- Create elevation bins (<1000 ft, 1000-3000 ft, >3000 ft)
-- Made sure all column names are the same 
-
-### Data Visualization 
-#### Visualization 1
+# Results 
+## Comparing New Orleans average temperature changes over 20 years to Denvers 
 ```{r}
+# Load libraries 
 library(tidyverse)
-library(readr)
-library(lubridate)
+library(patchwork) 
 
-# Read the data
-hot_days <- read_csv("data/hot_days.csv", show_col_types = FALSE)
-elevation <- read_csv("data/elevation.csv", show_col_types = FALSE)
+# Read and clean data
+temp_data <- read_csv("data/denver_neworleans.csv", show_col_types = FALSE)
 
-# Create Elevation column
-elevation <- elevation %>%
-  mutate(Elevation = as.numeric(`High Feet`)) %>%
-  select(City, State, Elevation)
+temp_data_clean <- temp_data %>% 
+  filter(!is.na(TAVG))
 
-# Merge elevation data with hot_days
-hot_days <- left_join(hot_days, elevation, by = c("City", "State"))
-
-# Now create elevation bins
-hot_days <- hot_days %>%
-  mutate(elevation_bin = case_when(
-    Elevation < 1000 ~ "Low (<1000ft)",
-    Elevation >= 1000 & Elevation < 3000 ~ "Mid (1000–3000ft)",
-    Elevation >= 3000 ~ "High (>3000ft)"
-  ))
-
-```
-
-```{r}
-# Add a Year column (based on End_Date or Start_Date if needed)
-hot_days <- hot_days %>%
-  mutate(Year = as.numeric(substr(as.character(Start_Date), 1, 4)))
-
-# Plot trend over time by elevation bin
-hot_days %>%
-  filter(!is.na(elevation_bin)) %>%
-  ggplot(aes(x = Year, y = ANN, color = elevation_bin)) +
-  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  labs(title = "Average Number of Days ≥ 90°F (2000–2020)",
+# Plot both cities together
+ggplot(temp_data_clean, aes(x = Year, y = TAVG, color = City)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = "lm") +  # add smooth trend line
+  labs(title = "Average Temperature over Time: Denver vs New Orleans",
        x = "Year",
-       y = "Days ≥ 90°F",
-       color = "Elevation Bin") +
-  theme_minimal()
+       y = "Average Temperature (TAVG)") +
+  theme_minimal() +
+  scale_color_manual(values = c("DENVER" = "skyblue", "NEW ORLEANS" = "deeppink"))
 ```
 
-#### Visualization 2
+## EDA of Denver vs New Orleans temperatures 
 ```{r}
-library(stringr)
+# Load libraries
+library(tidyverse)
+
+# Read and clean the data
+temp_data <- read_csv("data/denver_neworleans.csv", show_col_types = FALSE) %>%
+  filter(!is.na(TAVG))
+
+# Focus only on the important columns
+selected_vars <- temp_data %>%
+  select(City, Year, EMAXT, EMINT, TMAX, TMIN, DT32, DX90)
+
+# Pivot data longer so each measurement type is a "variable"
+long_temp_data <- selected_vars %>%
+  pivot_longer(cols = c(EMAXT, EMINT, TMAX, TMIN, DT32, DX90),
+               names_to = "Measurement",
+               values_to = "Value")
+
+# Separate data for Denver
+denver_data <- long_temp_data %>%
+  filter(City == "DENVER")
+
+# Separate data for New Orleans
+new_orleans_data <- long_temp_data %>%
+  filter(City == "NEW ORLEANS")
+
+# Plot for Denver
+ggplot(denver_data, aes(x = Year, y = Value, color = City)) +
+  geom_line(color = "skyblue", linewidth = 1) +
+  geom_point(color = "skyblue") +
+  geom_smooth(se = FALSE, method = "lm") +
+  facet_wrap(~ Measurement, scales = "free_y") +
+  labs(title = "Denver",
+       x = "Year",
+       y = "Value") +
+  theme_light() +
+  scale_color_manual(values = c("DENVER" = "skyblue2"))
+
+# Plot for New Orleans
+ggplot(new_orleans_data, aes(x = Year, y = Value, color = City)) +
+  geom_line(color = "deeppink", linewidth = 1) +
+  geom_point(color = "deeppink") +
+  geom_smooth(se = FALSE, method = "lm") +
+  facet_wrap(~ Measurement, scales = "free_y") +
+  labs(title = "New Orleans",
+       x = "Year",
+       y = "Value") +
+  theme_light() +
+  scale_color_manual(values = c("NEW ORLEANS" = "deeppink2"))
+```
+
+Each graph is titled with the column name. **EMINT** = extreme min temperature (averaged annually), **EMAXT** = extreme max temperature (averaged annually), **TAVG** = normal temperature (averaged annually), **TMAX** = max temperature (averaged annually), **TMIN** = min temperature (averaged annually), **DT32** = days where the temperature is less than 32 degrees Fahrenheit, **DX90** = days where the temperature is greater than or equal to 90 degrees Fahrenheit. This graph shows 
+
+## Line plot comparing humidity
+```{r}
 library(dplyr)
-# Load and clean data
-cool_days <- read_csv("data/cold_days.csv", show_col_types = FALSE)
+library(tidyr)
+library(ggplot2)
+library(readr)
 
-elevation <- read_csv("data/elevation.csv", show_col_types = FALSE)
+# Load in Data
+humid <- read.csv("data/humidity.csv")
 
-# Create an elevation column 
+# Fix colnames in humid data
+colnames(humid) <- c("Station ID", "City", "State", "Start Date", "End Date", "JAN_M", "JAN_A", "FEB_M", "FEB_A", "MAR_M", "MAR_A", "APR_M", "APR_A", "MAY_M", "MAY_A", "JUN_M", "JUN_A", "JUL_M", "JUL_A", "AUG_M", "AUG_A", "SEP_M", "SEP_A", "OCT_M", "OCT_A", "NOV_M", "NOV_A", "DEC_M", "DEC_A", "ANN_M", "ANN_A")
+
+# Filter data for Den and NewO
+humid_filtered <- humid %>%
+  filter(City %in% c("DENVER", "NEW ORLEANS")) %>%
+  select(City, JAN_M, JAN_A, FEB_M, FEB_A, MAR_M, MAR_A, APR_M, APR_A, MAY_M, MAY_A, JUN_M, JUN_A, JUL_M, JUL_A, AUG_M, AUG_A, SEP_M, SEP_A, OCT_M, OCT_A, NOV_M, NOV_A, DEC_M, DEC_A, ANN_M, ANN_A)
+
+# Reshape data
+humid_long <- humid_filtered %>%
+  pivot_longer(cols = JAN_M:DEC_A,  
+               names_to = c("Month", "Time"), 
+               names_pattern = "(\\w{3})_(\\w)",
+               values_to = "Humidity")
+
+head(humid_long)
+```
+```{r}
+library(ggplot2)
+
+ggplot(humid_long, aes(x = Month, y = Humidity, color = City, group = interaction(City, Month))) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Monthly Humidity Comparison: Denver vs. New Orleans", 
+       x = "Month", 
+       y = "Humidity (%)") +
+  scale_x_discrete(limits = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")) +
+    scale_color_manual(values = c("DENVER" = "skyblue", "NEW ORLEANS" = "deeppink")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Linear Regression Plot 
+```{r}
+# Read in data 
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+climate_data <- read_csv("data/denver_neworleans.csv")
+elevation <- read_csv("data/elevation.csv")
+UHI <- read_csv("data/UHI.csv")
+
+# Clean and prep datasets 
 elevation <- elevation %>%
-  mutate(Elevation = as.numeric(`High Feet`)) %>%
-  select(City, State, Elevation)
+  mutate(Elevation_ft = ( `High Feet` + `Low Feet` ) / 2) %>%
+  select(City, Elevation_ft)
 
-# Merge elevation data with hot_days
-cool_days <- left_join(cool_days, elevation, by = c("City", "State"))
+UHI <- UHI %>%
+  rename(UHI_Effect = `Citywide urban heat island effect (rolled-up from census tract data, weighted by area, in degrees F)`) %>%
+  select(City, UHI_Effect)
 
-# Now create elevation bins
-cool_days <- cool_days %>%
-  mutate(elevation_bin = case_when(
-    Elevation < 1000 ~ "Low (<1000ft)",
-    Elevation >= 1000 & Elevation < 3000 ~ "Mid (1000–3000ft)",
-    Elevation >= 3000 ~ "High (>3000ft)"
-  ))
+final_data$City <- toupper(final_data$City)
+UHI$City <- toupper(UHI$City)
 
-# Create a proper Year column (if it uses the YYYYMM format)
-cool_days <- cool_days %>%
-  mutate(Year = as.integer(substr(Start_Date, 1, 4)))
+# Merge everything 
+final_data <- climate_data %>%
+  left_join(elevation, by = "City") %>%
+  left_join(UHI, by = "City")
 
-# Filter data to include only years 2000 to 2020
-cool_days_filtered <- cool_days %>%
-  dplyr::filter(Year >= 2000 & Year <= 2020)
+# Remove rows with NA values in the necessary columns
+final_data_clean <- final_data %>%
+  filter(!is.na(TAVG), !is.na(Elevation_ft), !is.na(UHI_Effect))
 
+# Build model 
+model <- lm(TAVG ~ Elevation_ft + UHI_Effect, data = final_data_clean)
 
+summary(model)
 
-# Plot the trend over time by elevation bin
-cool_days %>%
-  filter(!is.na(elevation_bin)) %>%
-  ggplot(aes(x = Year, y = ANN, color = elevation_bin)) +
-  stat_summary(fun = mean, geom = "line", linewidth = 1.2) +
-  labs(title = "Average Number of Days ≤ 32°F (2000–2020)",
-       x = "Year",
-       y = "Days ≤ 32°F",
-       color = "Elevation Bin") +
-  theme_minimal()
+# Scatter plot for Elevation vs TAVG
+ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = City)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "forestgreen") +
+  labs(title = "Elevation vs. Temperature (TAVG)", x = "Elevation (ft)", y = "Temperature (TAVG)") +
+  scale_color_manual(values = c("NEW ORLEANS" = "deeppink", "DENVER" = "skyblue"))
+
+# Scatter plot for UHI Effect vs TAVG
+ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "purple") +
+  labs(title = "UHI Effect vs. Temperature (TAVG)", x = "UHI Effect (°F)", y = "Temperature (TAVG)") +
+  scale_color_manual(values = c("NEW ORLEANS" = "deeppink", "DENVER" = "skyblue"))
 ```
 
 
-## Methods Identification
-
-Within RStudio, we can perform spatial analysis to show regional variations in temperature. We can do this by using mapping tools like ggplot2, sf, or terra. We will assess how temperature changes over time using line graphs or trend lines for each city, then compare them to each other. We could include more supplemental data like normal temperatures to compare what the temperatures usually look like versus what they are now. We could also include things like humidity because humidity changes a lot in different elevations so it might be something important to keep track of. Some potential challenges we might see in the data is missing values or unavailable pieces of data. It also might have regional variation where not all areas have elevation data so we will not be able to use it. Some potential challenges we see in the methods include the complexity to compare data over two decades. So it is very important to focus on organizing and cleaning the data. It also may be hard to strictly distinguish between correlation and causation. Lastly, the selected methods will help us get to our final goal because these methods help us perform spatial and temporal analysis to visualize the data and support our claim. We can also compare our findings to try and find a possible cause or a strong influence for temperature changes.
 
 
 
 
+
+
+
+# Discussion/Conclusion
 
 
