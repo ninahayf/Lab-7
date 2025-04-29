@@ -20,7 +20,7 @@ bibliography: references.bib
     We then decided to make many visualizations. (1) a line plot comparing humidity between Denver and New Orleans, (2) a bar plot comparing hot and cold days in Denver vs New Orleans, (3) a liner regression model showing elevation vs average annual temperature in Denver vs New Orleans, and (4) a linear regression model showing urban heat index effect vs average annual temperature in Denver vs New Orleans. 
 
 # Results 
-## Time Series Anaysis : Average Temperature Trends for Denver vs New Orleans 
+## Time Series Analysis : Average Temperature Trends for Denver vs New Orleans 
 To investigate the impact of altitude on average temperature trends over time, we performed a time series analysis comparing Denver (high altitude) and New Orleans (low altitude). We aggregated temperature data by city and year, calculating the average temperature for each year. We included a linear regression to get statistical information to see if our data is significant or not. 
 ```{r}
 # Load libraries 
