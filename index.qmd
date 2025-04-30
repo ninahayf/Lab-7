@@ -6,6 +6,9 @@ authors:
     roles: writing
     corresponding: true
 bibliography: references.bib
+format: html
+execute: 
+  echo: true
 ---
 # Abstract
 Climate change has a strange way of impacting different altitudinal regions. Here in Colorado, one week it's 75 degrees and the next week it's snowing. So, what if we compared Denver, CO to a low altitude place that is commonly warm year-round, like New Orleans, LA. Using RStudio, we made visualizations of comparisons between the two cities in multiple different aspects using multiple different forms. These visualizations were able to give us a good picture of how different the two places are impacted by climate change. For our project we found most of our data from the NOAA website and were able to manipulate the data to fit the time frames needed. We also made sure to manipulate the data to make sure there was no missing or empty data place. These datasets included temperature, elevation, humidity, and urban heat. We performed several analyses for our project, comparing different components of our data. Our time series analysis showed upward trends in temperature for warm days in both Denver and New Orleans with Denver having colder winters. A multi-line time series plot compared humidity between the cities, with New Orlenas having higher humidity across all months and times a day. Compared to Denver, peaking at selective months. A multiple linear regression showed how elevation and temperature had a strong correlation. Finally, we conducted an Exploratory Data Analysis comparing minimum and maximum temperatures, average, and extreme minimum and maximum. Both cities show long-term changes in climate patterns.
