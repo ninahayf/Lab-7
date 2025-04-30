@@ -196,7 +196,9 @@ UHI <- UHI %>%
   rename(UHI_Effect = `Citywide urban heat island effect (rolled-up from census tract data, weighted by area, in degrees F)`) %>%
   select(City, UHI_Effect)
 
-final_data$City <- toupper(final_data$City)
+# Ensure city names are consistent
+climate_data$City <- toupper(climate_data$City)
+elevation$City <- toupper(elevation$City)
 UHI$City <- toupper(UHI$City)
 
 # Merge everything 
