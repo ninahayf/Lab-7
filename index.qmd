@@ -6,9 +6,6 @@ authors:
     roles: writing
     corresponding: true
 bibliography: references.bib
-format: html
-execute: 
-  echo: true
 ---
 
 # Abstract
