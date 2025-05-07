@@ -2,7 +2,7 @@ project:
   type: manuscript
   output-dir: docs
 
-title: "My Document"
+title: "ESS 330 Final"
 bibliography: references.bib
 csl: apa.csl
 
