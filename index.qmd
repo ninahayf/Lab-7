@@ -46,10 +46,6 @@ Denver_and_New_Orleans_Elevation <- ggplot() +
   coord_fixed(1.3) +
   labs(title = "Denver and New Orleans with Elevation") +
   theme_minimal()
-
-# Save the plot as a PNG
-ggsave("images/Denver_and_New_Orleans_Elevation.png", 
-       plot = Denver_and_New_Orleans_Elevation)
 ```
 
 
@@ -98,9 +94,6 @@ TAVG_over_T <- ggplot(temp_data_clean, aes(x = Year, y = Average_Temperature, co
        y = "Average Temperature (°F)") +
   theme_minimal() +
   scale_color_manual(values = c("DENVER" = "skyblue", "NEW ORLEANS" = "deeppink"))
-
-ggsave("images/TAVG_over_T.png", 
-       plot = TAVG_over_T)
 ```
 
 The time series plot shows average temperature trends for both Denver and New Orleans from 2000-2020. As seen in the figure, Denver and New Orleans have very similar fluctuations with New Orleans increasing a bit more. A linear regression was applied to both cities, revealing that Denver's temperature had increased at a rate of 0.037°F per year but the p-value is greater than 0.05, making it not statistically significant. New Orleans temperature had increased at a rate of 0.41°F per year and the p-value was less than 0.05, making it statistically significant.
@@ -159,11 +152,6 @@ New_Orleans_Temp_Data <- ggplot(new_orleans_data, aes(x = Year, y = Value, color
        y = "Value") +
   theme_light() +
   scale_color_manual(values = c("NEW ORLEANS" = "deeppink2"))
-
-ggsave("images/Denver_Temp_Data.png",
-       plot = Denver_Temp_Data)
-ggsave("images/New_Orleans_Temp_Data.png", 
-       plot = New_Orleans_Temp_Data)
 ```
 
 After analyzing the trend lines (created from linear smoothing), we can see that Denver has steady fluctuations when it comes to extreme minimum and maximum temperatures over the years. The temperature maximums, minimums, and days 90°F or above have similar upward trends. But, days below 32°F have been slowly decreasing overtime. Then, going to the New Orleans graphs, all of the graphs have a steep upward slant excluding the days below 32°F.
@@ -220,9 +208,6 @@ Humidity <- ggplot(humid_long, aes(x = Month, y = Humidity, color = CityTime, gr
                                 "NEW ORLEANS_M" = "deeppink",
                                 "NEW ORLEANS_A" = "deeppink3")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggsave("images/Humidity.png", 
-       plot = Humidity)
 ```
 
 Overall, New Orleans exhibited consistently higher humidity than Denver across all months for both morning and afternoon periods. Morning humidity was higher than afternoon humidity throughout the year. Denver's humidity is highest in the MAY, NOV, and DEC months while New Orleans humidity is highest in the summer months (JUN-SEP).
@@ -278,9 +263,6 @@ elev_tavg <- ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = Ci
   geom_smooth(method = "lm", col = "forestgreen") +
   labs(title = "Elevation vs. Temperature (TAVG)", x = "Elevation (ft)", y = "Temperature (TAVG)") +
   scale_color_manual(values = c("NEW ORLEANS" = "deeppink", "DENVER" = "skyblue"))
-
-ggsave("images/elev_tavg.png", 
-       plot = elev_tavg)
 ```
 
 ```{r}
@@ -290,9 +272,6 @@ UHI_TAVG <- ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)
   geom_smooth(method = "lm", col = "purple") +
   labs(title = "UHI Effect vs. Temperature (TAVG)", x = "UHI Effect (°F)", y = "Temperature (TAVG)") +
   scale_color_manual(values = c("NEW ORLEANS" = "deeppink", "DENVER" = "skyblue"))
-
-ggsave("images/UHI_TAVG.png", 
-       plot = UHI_TAVG)
 ```
 
 The model showed that elevation was a significant predictor of temperature. In the linear regression analysis of temperature over time, Denver had a p-value of 0.407, indicating no statistically significant warming trend. In contrast, New Orleans had a p-value less than 0.001, suggesting that average temperatures there are steadily increasing. In the multiple linear regression model relating temperature to elevation and UHI effect, only elevation was a statistically significant predictor (p \< 0.001). UHI_effect was not calculated due to its correlation with elevation and temperature. The model had a very high explanatory power (R-squared = 0.985), indicating that variation in temperature was nearly fully explained by elevation alone.
