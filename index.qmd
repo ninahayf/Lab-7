@@ -37,7 +37,7 @@ cities <- data.frame(
 
 us_map <- map_data("state")
 
-Denver_and_New_Orleans_Elevation <- ggplot() +
+ggplot() +
   geom_polygon(data = us_map, aes(x = long, y = lat, group = group),
                fill = "lightgray", color = "white") +
   geom_point(data = cities, aes(x = lon, y = lat), color = "magenta", size = 3) +
@@ -58,7 +58,6 @@ To investigate the impact of altitude on average temperature trends over time, w
 library(tidyverse)
 library(patchwork)
 library(tsibble)
-library(ggplot2)
 
 # Read and clean data
 temp_data <- read_csv("data/denver_neworleans.csv", show_col_types = FALSE)
@@ -85,7 +84,7 @@ summary(model_denver)
 summary(model_neworleans)
 
 # Plot the time series for temperature by city
-TAVG_over_T <- ggplot(temp_data_clean, aes(x = Year, y = Average_Temperature, color = City)) +
+ggplot(temp_data_clean, aes(x = Year, y = Average_Temperature, color = City)) +
   geom_line(linewidth = 1) +  # Line for each city
   geom_point() +              # Points for each year
   geom_smooth(se = FALSE, method = "lm") +  # Smoothing trend line for each city
@@ -130,7 +129,7 @@ new_orleans_data <- long_temp_data %>%
   filter(City == "NEW ORLEANS")
 
 # Plot for Denver
-Denver_Temp_Data <- ggplot(denver_data, aes(x = Year, y = Value, color = City)) +
+ggplot(denver_data, aes(x = Year, y = Value, color = City)) +
   geom_line(color = "skyblue", linewidth = 1) +
   geom_point(color = "skyblue") +
   geom_smooth(se = FALSE, method = "lm") +
@@ -194,7 +193,7 @@ head(humid_long)
 ```{r}
 library(ggplot2)
 
-Humidity <- ggplot(humid_long, aes(x = Month, y = Humidity, color = CityTime, group = CityTime)) +
+ggplot(humid_long, aes(x = Month, y = Humidity, color = CityTime, group = CityTime)) +
   geom_line() +
   geom_point() +
   theme_minimal() +
@@ -258,7 +257,7 @@ summary(model)
 
 ```{r}
 # Scatter plot for Elevation vs TAVG
-elev_tavg <- ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = City)) +
+ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = City)) +
   geom_point() +
   geom_smooth(method = "lm", col = "forestgreen") +
   labs(title = "Elevation vs. Temperature (TAVG)", x = "Elevation (ft)", y = "Temperature (TAVG)") +
@@ -267,7 +266,7 @@ elev_tavg <- ggplot(final_data_clean, aes(x = Elevation_ft, y = TAVG, color = Ci
 
 ```{r}
 # Scatter plot for UHI Effect vs TAVG
-UHI_TAVG <- ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)) +
+ggplot(final_data_clean, aes(x = UHI_Effect, y = TAVG, color = City)) +
   geom_point() +
   geom_smooth(method = "lm", col = "purple") +
   labs(title = "UHI Effect vs. Temperature (TAVG)", x = "UHI Effect (°F)", y = "Temperature (TAVG)") +
